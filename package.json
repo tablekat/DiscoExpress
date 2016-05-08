@@ -1,0 +1,27 @@
+{
+  "name": "discoexpress",
+  "version": "0.2.0",
+  "description": "Super lightweight routing for discord bots",
+  "main": "src/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "discord.js": "^7.0.0",
+    "object-assign": "^4.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tablekat/DiscoExpress.git"
+  },
+  "author": "Kathy Hill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tablekat/DiscoExpress/issues"
+  },
+  "homepage": "https://github.com/tablekat/DiscoExpress#readme"
+}
