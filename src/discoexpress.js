@@ -1,5 +1,5 @@
 
-var Discord = require("../node_modules/discord.js");
+var Discord = require("discord.js");
 var Route = require('./Route');
 
 function DiscoExpress(){
