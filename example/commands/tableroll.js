@@ -9,8 +9,8 @@ module.exports = function(db){ // Pretend this needs db
     if(resRoll){
 
       if(typeof(resRoll[1]) !== "undefined"){
-        var randRes = 1 + Math.floor(Math.random() * resRoll[2]);
-        bot.reply(msg, "Random from 1 to " + (1 * resRoll[2]) + ": " + randRes);
+        var randRes = 1 + Math.floor(Math.random() * resRoll[1]);
+        bot.reply(msg, "Random from 1 to " + (1 * resRoll[1]) + ": " + randRes);
       }
 
       return;

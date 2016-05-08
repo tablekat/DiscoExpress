@@ -1,33 +1,42 @@
 
+var Discord = require("../node_modules/discord.js");
+var Route = require('./Route');
 
 function DiscoExpress(){
 
-  this.handlers = [];
+  this.bot = new Discord.Client();
+  this.routes = {};
+  this.loggedIn = false;
 
 }
 
-DiscoExpress.prototype.route = function(handler){
-  if(typeof handler != "function"){
-    throw new Error("Invalid handler");
+DiscoExpress.prototype.on = function(event, handler){
+  if(!this.routes[event]){
+    this.routes[event] = new Route();
+    this.listenToEvent(event, this.routes[event]);
   }
-  this.handlers.push(handler);
+  this.routes[event].route(handler);
 }
 
-DiscoExpress.prototype.receive = function(bot, msg, next){
-  if(typeof next !== "function") next = function(){};
-  if(!this.handlers.length) return next();
-
-  var self = this;
-  var handlerI = -1;
-  var handlerNext = function(err){
-    //if(err) false; // do nothing
-    handlerI++;
-    if(handlerI >= self.handlers.length) return next();
-    self.handlers[handlerI](bot, msg, handlerNext);
-  };
-
-  handlerNext(null);
-
+DiscoExpress.prototype.listenToEvent = function(event, route){
+  var bot = this.bot;
+  this.bot.on(event, function(){
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(bot);
+    route.receive.apply(route, args);
+  });
 }
+
+DiscoExpress.prototype.login = function(email, password, next){
+  if(typeof password == "function" || !password){
+    var token = email;
+    next = password || function(){};
+    this.bot.loginWithToken(token, null, null, next);
+  }else{
+    this.bot.login(email, password, next);
+  }
+}
+
+
 
 module.exports = DiscoExpress;
