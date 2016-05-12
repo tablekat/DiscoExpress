@@ -49,9 +49,19 @@ app.on("message", (bot, msg, next) => {
   }
 });
 
+// Other events can be routed the same way.
+app.on("serverNewMember", (bot, server, user, next) => {
+  console.log("Logging new member join:", user.name);
+  return next();
+});
+app.on("serverNewMember", (bot, server, user, next) => {
+  // Greet the user in the general channel.
+  bot.sendMessage(server.id, "Welcome " + user + "!");
+  return next();
+});
+
 app.login("[token]");
 ```
-
 
 ### Advanced Routes
 
