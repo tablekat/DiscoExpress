@@ -51,3 +51,46 @@ app.on("message", (bot, msg, next) => {
 
 app.login("[token]");
 ```
+
+
+### Advanced Routes
+
+Passing multiple handlers to `app.on` will create a subroute. A subroute can
+have its own middleware. This can be useful, for example, to make a subroute
+where only people with the role "Moderator" can run the commands.
+
+A subroute can be broken out of with `next(false)`.
+
+```js
+
+// Multiple handlers can be given to one call of app.on(). This will create a
+// sub-route, which can be broken out of by calling next(false);
+var requireMod = require('discoexpress-require-role')(["Moderator", "Admin"]);
+app.on("message", requireMod, (bot, msg, next) => {
+  // Only users with a role named "Moderator" or "Admin" can run this command!
+  if(msg.content == "!modcmd"){
+    bot.reply(msg, "A moderator ran this command!");
+  }else{
+    next();
+  }
+});
+
+
+// Alternatively, you can create subroutes manually!
+var subroute = new DiscoExpress.Route();
+subroute.route((bot, msg, next) => {
+  if(msg.content.startsWith("!times2")){
+    return next();
+  }else{
+    // call next(false) to break from a subroute, and continue processing the parent route.
+    return next(false);
+  }
+});
+subroute.route((bot, msg, next) => {
+  // Should only get to this route if command starts with !times2, as per the handler above this.
+  // Make sure ignoreself middleware is enabled, or this message will trigger itself repeatedly!
+  bot.sendMessage(msg.channel, msg.content + msg.content);
+});
+app.on("message", subroute);
+
+```

@@ -35,7 +35,38 @@ function setupDiscoExpress(){
   app.on("message", require("./commands/tableroll.js")(db));
 
 
-  app.login(AuthDetails.email, AuthDetails.password);
+  // Require a user to have a role to run a command.
+  var requireMod = require("./middleware/require-role")(["admin", "moderator", "Trusted Employee"]);
+  app.on("message", requireMod, (bot, msg, next) => {
+    if(msg.content === "!modcmd"){
+      bot.reply(msg, "Moderator only command!");
+    }else{
+      return next();
+    }
+  });
+
+  // Alternatively, you can create subroutes manually!
+  var subroute = new DiscoExpress.Route();
+  subroute.route((bot, msg, next) => {
+    if(msg.content.startsWith("!times2")){
+      return next();
+    }else{
+      // call next(false) to break from a subroute, and continue processing the parent route.
+      return next(false);
+    }
+  });
+  subroute.route((bot, msg, next) => {
+    // Should only get to this route if command starts with !times2, as per the handler above this.
+    // Make sure ignoreself middleware is enabled, or this message will trigger itself repeatedly!
+    bot.sendMessage(msg.channel, msg.content + msg.content);
+  });
+  app.on("message", subroute);
+
+
+
+
+
+  app.login(AuthDetails.token);
 
 }
 

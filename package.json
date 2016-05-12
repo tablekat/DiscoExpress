@@ -1,6 +1,6 @@
 {
   "name": "discoexpress",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Super lightweight routing for discord bots",
   "main": "src/index.js",
   "directories": {
