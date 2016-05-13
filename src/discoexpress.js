@@ -24,7 +24,7 @@ DiscoExpress.prototype.on = function(event, handler/*, ... handlers*/){
     this.routes[event] = new Route();
     this.listenToEvent(event, this.routes[event]);
   }
-  
+
   if(arguments.length <= 2){
     this.routes[event].route(handler);
   }else{
@@ -34,6 +34,8 @@ DiscoExpress.prototype.on = function(event, handler/*, ... handlers*/){
     }
     this.routes[event].route(handlerRoute);
   }
+
+  return this;
 }
 
 /**
@@ -67,6 +69,8 @@ DiscoExpress.prototype.login = function(email, password, next){
   }else{
     this.bot.login(email, password, next);
   }
+
+  return this;
 }
 
 
