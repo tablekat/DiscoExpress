@@ -1,13 +1,85 @@
 # DiscoExpress
 
-Super lightweight express-like routing for discord bots
+Lightweight express-like routing for discord bots
 
 This acts as a wrapper to discord.js, but provides support for middleware-style
 routing for discord.js events.
 
 ### Example
 
-See `/example` for more.
+See `/example/mainWithHelpers.js` for more.
+
+```js
+var DiscoExpress = require('discoexpress');
+var app = new DiscoExpress()
+  .on("ready", () => console.log("Bot ready"))
+  .on("disconnected", () => console.log("Disconnected"))
+
+  // Log all messages that come through, then continue to other handlers.
+  .on("message", () => {
+    console.log("Got message:", msg.content);
+    next();
+  })
+
+  // Ignore messages from myself - don't call any handlers after this one
+  // if the message author is this bot
+  .on("message", DiscoExpress.ignoreSelf)
+
+  // Reply to the message "!ping" with "pong!"
+  .on("message",
+    DiscoExpress.contentMatches("!ping"),
+    DiscoExpress.reply("pong!")
+  )
+
+  // Reply can take a function as an argument, and contentMatches can take a regexp
+  .on("message",
+    DiscoExpress.contentMatches(/^!flip/),
+    DiscoExpress.reply(() => Math.random() < 0.5 ? "Heads" : "Tails")
+  );
+
+  // This message will never be reached, because the !flip handler above will always
+  // catch the message "!fliptable"
+  .on("message",
+    DiscoExpress.contentMatches("!fliptable"),
+    DiscoExpress.reply("No don't flip tables")
+  )
+
+  // See /src/helpers for all the helpers available, and see the examples below for
+  // writing your own handlers
+  .on("message",
+    DiscoExpress.requireRole(["admin", "mod"]),
+    DiscoExpress.contentMatches("!modcmd"),
+    DiscoExpress.reply("you just used a mod command!", true)
+  )
+
+  // A more complicated example
+  .on("message",
+    DiscoExpress.requirePermission("manageRoles"),
+    DiscoExpress.contentMatches(/!setcolor ([^\s]+) ([a-zA-Z0-9]{6})$/),  // Only accept role names without spaces, for simplicity
+    DiscoExpress.withArgs((args, bot, msg, next) => {
+      var roleName = args[1];
+      var color = args[2];
+
+      var role = msg.channel.server.roles.get('name', roleName);
+
+      bot.updateRole(role, {
+        color: parseInt(color, 16)
+      }, function(err, role){
+        if(err) return bot.reply(msg, "Failed to update role color: " + err.message);
+        bot.reply(msg, "Role " + role.name + " updated!");
+      });
+    })
+  )
+
+  .login("[token]");
+
+
+```
+
+
+### Example without DiscoExpress helpers
+
+See `/example/main.js` for more.
 
 ```js
 var DiscoExpress = require('discoexpress');
