@@ -58,7 +58,16 @@ Route.prototype.receive = function(/*bot, ...handlerArgs, next*/){
     if(handler instanceof Route){
       handler.receive.apply(handler, args);
     }else{
-      handler.apply(null, args);
+      var resp = handler.apply(null, args);
+      if(resp && typeof resp.then === "function"){
+        // Returned a promise
+        resp.then(handlerNext, handlerNext);
+      }else if(resp === true){
+        // Returned true, which means it will handle calling next, so do nothing.
+      }else{
+        // Should maybe nextTick this
+        handlerNext(resp);
+      }
     }
   };
 

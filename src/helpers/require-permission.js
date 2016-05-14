@@ -9,12 +9,12 @@ module.exports = function(permission){
 
     for(var i = 0; i < userRoles.length; ++i){
       if(userRoles[i].hasPermission(permission)){
-        return next(); // User has permission
+        return; // User has permission
       }
     }
 
     // Failed to find permission on user. Break this route branch.
-    return next(false);
+    return false;
 
   }
 }

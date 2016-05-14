@@ -6,16 +6,18 @@ module.exports = function(matcher){
 
     if(matcher instanceof RegExp){
       if(matcher.exec(msg.content)){
-        return next();
+        // test passed, continue down this branch
+        return;
       }
     }else{
       if(matcher == msg.content){
-        return next();
+        // test passed, continue down this branch
+        return;
       }
     }
 
     // Failed to find permission on user. Break this route branch.
-    return next(false);
+    return false;
 
   }
 }

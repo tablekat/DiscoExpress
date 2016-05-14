@@ -1,5 +1,26 @@
 # DiscoExpress
 
+This is a branch of discoexpress to consider using promises instead of callbacks
+for route continuation. Essentially, if a handler returns nothing, it
+immediately goes to the next handler, instead of not doing anything and only
+going to the next handler when that handler calls its `next` callback argument.
+The handler can also return a promise, in which case it will not immediately go
+to the next, but instead wait for the promise to resolve.
+
+Comparisons of code styles:
+http://i.imgur.com/plr75K6.png
+
+One of the problems is considering how to do that "msg.stopPropagation". How to
+reliably give an event parameter a stopPropagation function, if the library is
+dumb and doesn't know each of discord.js's events parameters. For example,
+when a member joins a server, the even gets a `server` and a `user` object,
+which of those get the stopPropagation? The bot can't because it can be shared
+at the same time on routes on 2 different types of events simultaneously.
+Maybe just pass an event object? Maybe as the last parameter instead of next, so
+the handlers can only use it optionally.
+
+-----
+
 Lightweight express-like routing for discord bots
 
 This acts as a wrapper to discord.js, but provides support for middleware-style

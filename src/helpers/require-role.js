@@ -11,15 +11,15 @@ module.exports = function(roles){
       for(var j = 0; j < roles.length; ++j){
         var role = roles[j];
         if(typeof role === "string"){
-          if(role == userRoles[i].name) return next(); // User has role (by string)
+          if(role == userRoles[i].name) return; // User has role (by string)
         }else if(role.id){
-          if(role.id == userRoles[i].id) return next(); // User has role (by id match)
+          if(role.id == userRoles[i].id) return; // User has role (by id match)
         }
       }
     }
 
     // Failed to find role on user. Break this route branch.
-    return next(false);
+    return false;
 
   }
 }

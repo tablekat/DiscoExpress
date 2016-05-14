@@ -16,7 +16,6 @@ function setupDiscoExpress(){
 
   app.on("message", (bot, msg, next) => {
     console.log("I got a message!", msg.content);
-    return next();
   });
 
   // This middleware will prevent any command routes from running, if the sender is the bot itself
@@ -41,7 +40,7 @@ function setupDiscoExpress(){
     if(msg.content === "!modcmd"){
       bot.reply(msg, "Moderator only command!");
     }else{
-      return next();
+      return;
     }
   });
 
@@ -49,10 +48,10 @@ function setupDiscoExpress(){
   var subroute = new DiscoExpress.Route();
   subroute.route((bot, msg, next) => {
     if(msg.content.startsWith("!times2")){
-      return next();
+      return;
     }else{
-      // call next(false) to break from a subroute, and continue processing the parent route.
-      return next(false);
+      // return false to break from a subroute, and continue processing the parent route.
+      return false;
     }
   });
   subroute.route((bot, msg, next) => {
@@ -61,6 +60,7 @@ function setupDiscoExpress(){
     bot.sendMessage(msg.channel, msg.content + msg.content);
   });
   app.on("message", subroute);
+
 
 
 

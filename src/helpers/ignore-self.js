@@ -3,9 +3,9 @@
 module.exports = function(bot, msg, next){
 
   if(msg.sender.id == bot.user.id){
-    return;
+    return false;
   }else{
-    next();
+    return;
   }
 
 }

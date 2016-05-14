@@ -18,5 +18,7 @@ module.exports = function(message, useSendMessage){
       }
     }
 
+    return true; // Tell the router to let us handle calling next ourselves (which we won't do, so all routes are completely finished.)
+
   }
 }
