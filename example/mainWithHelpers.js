@@ -62,6 +62,7 @@ function setupDiscoExpress(){
 
     .on("message",
       DiscoExpress.contentMatches("!flip"),
+      DiscoExpress.wait(2000),
       DiscoExpress.reply(() => Math.random() < 0.5 ? "Heads" : "Tails")
     );
 

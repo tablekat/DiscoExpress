@@ -8,5 +8,6 @@ DiscoExpress.reply                = require('./helpers/reply.js');
 DiscoExpress.requirePermission    = require('./helpers/require-permission.js');
 DiscoExpress.requireRole          = require('./helpers/require-role.js');
 DiscoExpress.withArgs             = require('./helpers/with-args.js');
+DiscoExpress.wait                 = require('./helpers/wait.js');
 
 module.exports = DiscoExpress;
