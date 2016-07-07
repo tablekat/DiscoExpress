@@ -7,10 +7,12 @@ routing for discord.js events.
 
 ### Example
 
-See `/example/mainWithHelpers.js` for more.
+See `/example/mainWithHelpers.js` for more. This example uses ES6 imports to import all the helpers, but see below for examples without this.
 
 ```js
-var DiscoExpress = require('discoexpress');
+import * as DiscoExpress from 'discoexpress';
+import { ignoreSelf, contentMatches, reply, requireRole, withArgs } from 'discoexpress'; // Optionally import helpers
+
 var app = new DiscoExpress()
   .on("ready", () => console.log("Bot ready"))
   .on("disconnected", () => console.log("Disconnected"))
@@ -23,40 +25,40 @@ var app = new DiscoExpress()
 
   // Ignore messages from myself - don't call any handlers after this one
   // if the message author is this bot
-  .on("message", DiscoExpress.ignoreSelf)
+  .on("message", ignoreSelf)
 
   // Reply to the message "!ping" with "pong!"
   .on("message",
-    DiscoExpress.contentMatches("!ping"),
-    DiscoExpress.reply("pong!")
+    contentMatches("!ping"),
+    reply("pong!")
   )
 
   // Reply can take a function as an argument, and contentMatches can take a regexp
   .on("message",
-    DiscoExpress.contentMatches(/^!flip/),
-    DiscoExpress.reply(() => Math.random() < 0.5 ? "Heads" : "Tails")
+    contentMatches(/^!flip/),
+    reply(() => Math.random() < 0.5 ? "Heads" : "Tails")
   );
 
   // This message will never be reached, because the !flip handler above will always
   // catch the message "!fliptable"
   .on("message",
-    DiscoExpress.contentMatches("!fliptable"),
-    DiscoExpress.reply("No don't flip tables")
+    contentMatches("!fliptable"),
+    reply("No don't flip tables")
   )
 
   // See /src/helpers for all the helpers available, and see the examples below for
   // writing your own handlers
   .on("message",
-    DiscoExpress.requireRole(["admin", "mod"]),
-    DiscoExpress.contentMatches("!modcmd"),
-    DiscoExpress.reply("you just used a mod command!", true)
+    requireRole(["admin", "mod"]),
+    contentMatches("!modcmd"),
+    reply("you just used a mod command!", true)
   )
 
   // A more complicated example
   .on("message",
-    DiscoExpress.requirePermission("manageRoles"),
-    DiscoExpress.contentMatches(/!setcolor ([^\s]+) ([a-zA-Z0-9]{6})$/),  // Only accept role names without spaces, for simplicity
-    DiscoExpress.withArgs((args, bot, msg, next) => {
+    requirePermission("manageRoles"),
+    contentMatches(/!setcolor ([^\s]+) ([a-zA-Z0-9]{6})$/),  // Only accept role names without spaces, for simplicity
+    withArgs((args, bot, msg, next) => {
       var roleName = args[1];
       var color = args[2];
 
