@@ -7,7 +7,7 @@
     "example": "example"
   },
   "dependencies": {
-    "discord.js": "^7.0.0",
+    "discord.js": "^11.2.1",
     "object-assign": "^4.0.1"
   },
   "devDependencies": {},
